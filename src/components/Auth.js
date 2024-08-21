@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { auth, googleProvider } from "../firebaseConfig";
 import { createUserWithEmailAndPassword, signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
+import Project from './Project.js';
 
 export const Auth = () => {
   const [email, setEmail] = useState("");
@@ -42,6 +43,18 @@ export const Auth = () => {
 
   return (
     <div>
+      {user ? (
+          <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+            <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+            <h3>Welcome, {user.email}</h3>
+            <button onClick={logout} className="mt-2 flex w-full justify-center rounded-md bg-red-800 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
+              Logout
+            </button>
+            </div>
+            <Project />
+          </div>
+          
+      ) : (
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
@@ -56,14 +69,7 @@ export const Auth = () => {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        {user ? (
-          <div>
-            <h3>Welcome, {user.email}</h3>
-            <button onClick={logout} className="mt-2 flex w-full justify-center rounded-md bg-red-800 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
-              Logout
-            </button>
-          </div>
-        ) : (
+        
           <form action="#" method="POST" className="space-y-6" onSubmit={e => e.preventDefault()}>
             <div>
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
@@ -109,14 +115,24 @@ export const Auth = () => {
               >
                 Sign in
               </button>
+            </div>
+            <div>
+              <button
+                type="submit"
+                className="flex w-full justify-center rounded-md bg-red-800 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+                onClick={signInWithGoogle}
+              >
+                Sign in with Google
+              </button>
 
               {/* <button onClick={signInWithGoogle}>Sign In with Google</button>
               <button onClick={logout}>Logout</button> */}
             </div>
           </form>
-          )}
+          
         </div>
       </div>
+      )}
     </div>
   );
 };
